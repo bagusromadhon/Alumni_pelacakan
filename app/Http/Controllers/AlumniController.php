@@ -6,15 +6,13 @@ use Illuminate\Http\Request;
 
 class AlumniController extends Controller
 {
-    public function index()
+public function index()
     {
-        // Mengambil semua data alumni dari master pangkalan data
-        $alumnis = Alumni::all(); 
+        // Mengambil data alumni sekalian menarik riwayat pelacakannya
+        $alumnis = Alumni::with('trackingHistories')->get(); 
         
-        // Mengirim data ke halaman tampilan (View)
         return view('alumni.index', compact('alumnis'));
     }
-
 
 
     public function track($id)
@@ -57,5 +55,22 @@ class AlumniController extends Controller
         $alumni = Alumni::with('trackingHistories')->findOrFail($id);
         
         return view('alumni.show', compact('alumni'));
+    
     }
+
+    public function store(Request $request)
+    {
+        // Menyimpan data lulusan baru dari master database kampus
+        Alumni::create([
+            'nama_asli' => $request->nama_asli,
+            'program_studi' => $request->program_studi,
+            'tahun_lulus' => $request->tahun_lulus,
+            'status_pelacakan' => 'Belum Dilacak'
+        ]);
+
+        return redirect()->back()->with('success', 'Data target alumni baru berhasil ditambahkan dan siap dilacak!');
+    }   
+
+
+    
 }

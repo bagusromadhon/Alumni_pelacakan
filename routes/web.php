@@ -21,3 +21,5 @@ Route::get('/', function () {
 Route::post('/alumni/{id}/track', [AlumniController::class, 'track']);
 
 Route::get('/alumni/{id}', [AlumniController::class, 'show']);
+
+Route::post('/alumni', [AlumniController::class, 'store']);
